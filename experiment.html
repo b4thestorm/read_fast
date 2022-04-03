@@ -1,0 +1,80 @@
+<html>
+    <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@100&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@700&display=swap" rel="stylesheet"> 
+    <Style>
+        p {
+          font-family: 'Lato', sans-serif;
+          -webkit-font-smoothing: antialiased;
+          line-height: 35px;
+        }
+    </Style>
+    </head>>
+    <body>
+        <h1>Read Faster</h1>
+        <hr>
+        <p id='surface'></p>
+        <form> 
+            <textarea id="subject" name="w3review" rows="4" cols="50"></textarea>
+            <button type="button" onclick="bionify()">Bionify</button>
+        </form>
+    </body>
+    <script type = "text/javascript">
+        const isLetter = (str) => {
+            if (str) {
+                return str.length === 1 && str.match(/[a-z]/i);
+            }
+            return false
+        }
+
+        const countHalfWord = (length) => {
+            return Math.ceil(length/2)
+        }
+
+        const mapParagraph = (sentence) => {
+            let mapping = []
+            for (word in sentence) {
+                let length = sentence[word].length
+                !!isLetter(sentence[word][0]) ? mapping.push(countHalfWord(length)) : mapping.push(0)
+            }
+            return mapping
+        }
+
+        function bionify() {
+            let textArea = document.getElementById("subject")
+            let paragraph = textArea.value
+            let words = paragraph.split(' ')
+            let mapping = mapParagraph(words)
+
+            let pTag = document.createElement('p')
+            pTag.style.fontSize = '22px'
+            for (let index = 0; index < words.length; index++) {
+                let fixatedIndex = mapping[index]
+
+                if (fixatedIndex != 0) {
+                //use the mapping to slice the word up ////////////////////
+                    let fixatedSection = words[index].slice(0, fixatedIndex)
+                    let normalSection = words[index].slice(fixatedIndex)
+                    let span = document.createElement('span') 
+                    span.innerText = fixatedSection
+                    span.style.fontWeight = 700
+                    pTag.appendChild(span)
+                    pTag.innerHTML += normalSection + ' '
+                    if (index % 50 === 0) {
+                        pTag.innerHTML += '<br>'
+                    }
+                } else {
+                //add the alphanumeric word to the pTag
+                    pTag.innerHTML += words[index] + ' '
+                }
+            }
+            let paper = document.getElementById('surface')
+            paper.appendChild(pTag)
+        }
+    
+      
+    
+    </script>
+</html>
